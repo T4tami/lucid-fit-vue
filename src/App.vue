@@ -1,23 +1,22 @@
 <template>
   <div id="app">
-    <nav>
-      <router-link to="/">Home</router-link>
-      <router-link to="/login">Login</router-link>
-      <router-link to="/register">Sign Up</router-link>
-    </nav>
+    <!-- Header 登入後才顯示 -->
+    <Header v-if="isLoggedIn" />
+
+    <!-- 頁面內容 -->
     <router-view></router-view>
   </div>
 </template>
 
+<script setup>
+import Header from '@/components/HeaderComponent.vue'
+import { useAuthStore } from '@/stores/auth'
+import { computed } from 'vue'
 
-<script>
+const authStore = useAuthStore()
 
-export default {
-  name: 'App',
-  components: {
-
-  }
-}
+// 判斷有沒有 token
+const isLoggedIn = computed(() => !!authStore.token)
 </script>
 
 <style>
