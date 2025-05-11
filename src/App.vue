@@ -1,31 +1,27 @@
 <template>
-  <div id="app">
-    <!-- Header 登入後才顯示 -->
-    <Header v-if="isLoggedIn" />
+  <div>
+    <!-- 頂欄 -->
+    <Header @toggle="isCollapsed = !isCollapsed" />
 
-    <!-- 頁面內容 -->
-    <router-view></router-view>
+    <!-- 側欄 -->
+    <Sidebar :collapsed="isCollapsed" />
+
+    <!-- 主要內容 -->
+    <main
+      :class="[
+        'transition-all pt-16',          // 避開 header 高度 (4rem)
+        isCollapsed ? 'ml-0' : 'ml-64'   // 避開 sidebar 寬度 (16rem)
+      ]"
+    >
+      <router-view />
+    </main>
   </div>
 </template>
 
 <script setup>
-import Header from '@/components/HeaderComponent.vue'
-import { useAuthStore } from '@/stores/auth'
-import { computed } from 'vue'
+import { ref } from 'vue'
+import Header from '@/components/layout/HeaderLayout.vue'
+import Sidebar from '@/components/layout/SideBar.vue'
 
-const authStore = useAuthStore()
-
-// 判斷有沒有 token
-const isLoggedIn = computed(() => !!authStore.token)
+const isCollapsed = ref(false)
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
